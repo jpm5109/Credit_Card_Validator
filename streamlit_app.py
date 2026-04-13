@@ -42,13 +42,18 @@ st.markdown("""
 
 def check_card(card_num):
     """Validate card and fetch card info"""
+    api_key = os.getenv("HANDY_API_KEY")
+    if not api_key:
+        st.error("❌ API Key not found. Please configure HANDY_API_KEY in your .env file")
+        return False, None
+    
     card_info = None
     clean_card_num = card_num.replace(" ", "").replace("-", "")
     
     try:
         response = requests.get(
             f"https://data.handyapi.com/bin/{clean_card_num}",
-            headers={"x-api-key": os.getenv("HANDY_API_KEY", "PUB-0YSHW371Y2C497yVNc3s56tQG")},
+            headers={"x-api-key": api_key},
             timeout=5
         )
         response.raise_for_status()  
